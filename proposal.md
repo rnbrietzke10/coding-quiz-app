@@ -29,3 +29,17 @@ Users of this site will be students in college or anyone wanting to possibly tra
 ---
 
 The data that will be for this application is from the [QuizAPI](https://quizapi.io/docs/1.0/overview) which has a wide variety of technical topic questions in their database. This will be used to query for types of questions for the quiz. It will also use the [YouTube API](https://developers.google.com/youtube/v3) to recommend videos based on the users most missed question topic.
+
+## Approach
+
+---
+
+### Schema (Tentative)
+
+---
+
+![alt text](Quiz_app_schema.drawio.svg)
+
+### Potential Problems
+
+---
