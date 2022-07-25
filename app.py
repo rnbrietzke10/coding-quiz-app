@@ -22,8 +22,14 @@ def home_page():
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup_route():
+    """
+    Sign up new user and add to database if form information is valid.
+    Login user if user is created and added to the database
+    Redirect user to user homepage
+    """
     form = SignUpForm()
     if form.validate_on_submit():
+        user = User.sign_up(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data, username=form.username.data, password=form.password.data, image_url=form.image_url.data)
         return redirect('/')
     
     return render_template('signup_page.html', form=form)
