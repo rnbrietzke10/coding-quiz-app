@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block title %}Signup{% endblock %} {% block content
+%}
+<h1>Sign up for the Coding Quiz App!</h1>
+
+<form method="post">
+  {% include "_form.html" %}
+  <button class="btn" type="submit">Sign Up!</button>
+</form>
+{% endblock %}

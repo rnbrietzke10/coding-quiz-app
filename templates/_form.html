@@ -1,0 +1,9 @@
+{{ form.hidden_tag()}} {% for field in form if field.widget.input_type !=
+'hidden' %}
+<p>
+  {{ field.label }} {{field(class_="form-field")}} {% for error in field.errors
+  %}
+  <span class="form-error-msg">{{ error }}</span>
+  {% endfor %}
+</p>
+{% endfor %}
