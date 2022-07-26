@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, redirect, session, flash
+from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User
 from forms import SignUpForm
@@ -27,9 +28,19 @@ def signup_route():
     Login user if user is created and added to the database
     Redirect user to user homepage
     """
+
     form = SignUpForm()
     if form.validate_on_submit():
-        user = User.sign_up(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data, username=form.username.data, password=form.password.data, image_url=form.image_url.data)
-        return redirect('/')
+        try:
+            user = User.sign_up(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data, username=form.username.data, password=form.password.data, image_url=form.image_url.data)
+            db.session.commit()
+            return redirect('/')
+        except IntegrityError:
+            db.session.rollback()
+            if User.query.filter(User.email == form.email.data).first():
+                flash("Email is already taken", "db-error")
+            if User.query.filter(User.username == form.username.data).first():
+                flash("Username is already taken", "db-error")
+            return render_template('signup_page.html', form=form)
     
     return render_template('signup_page.html', form=form)
