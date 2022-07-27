@@ -9,12 +9,12 @@ A quiz app to test your technical knowledge independently or with a study group.
 ## Goals
 
 1. Allow users to be able to take a quiz on technical topics individually.
-2. Users can connect with other users to create study groups and compare how they did on the same questions. This will be done by students answering the questions at the same time as a game or they can tag a friend in a quiz to take later.
+2. Users can connect with other users to create study groups and compare how they did on the same questions. This will be done by students answering the questions at the same time as a game, or they can tag a friend in a quiz to take later.
 3. Get video recommendations from [YouTube API](https://developers.google.com/youtube/v3) based on type of questions missed.
 
 ## Demographic
 
-Users of this site will be students in college or anyone wanting to possibly transition into the techfield.
+Users of this site will be students in college or anyone wanting to possibly transition into the tech-field.
 
 ## Data
 
@@ -52,4 +52,4 @@ Users who are not logged in will see a list of topics for questions, and list of
 
 Users sign up, once signed up they will be taken to their home dashboard where they can search for quizzes and/or study groups.
 
-Logged in users will be able to create quizzes and study groups. They can invite people to join their study groups via email or group code.
+Logged-in users will be able to create quizzes and study groups. They can invite people to join their study groups via email or group code.

@@ -2,8 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import Form, StringField, PasswordField, validators
 
 
-
-
 class SignUpForm(FlaskForm):
     """User sign up form"""
     username = StringField("Username", [validators.DataRequired()])
@@ -18,4 +16,3 @@ class LoginForm(FlaskForm):
     """User login form"""
     username = StringField("Username", [validators.DataRequired()])
     password = PasswordField("Password", [validators.DataRequired()])
-    

@@ -16,7 +16,7 @@ db.create_all()
 """
 
 
-u1 = User(
+u1 = User.sign_up(
     first_name="Sharon",
     last_name="Stone",
     email="sharon@gmail.com",
@@ -25,7 +25,7 @@ u1 = User(
     image_url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
 )
 
-u2 = User(
+u2 = User.sign_up(
     first_name="Ryan",
     last_name="Ryan",
     email="ryan@gmail.com",
@@ -34,5 +34,4 @@ u2 = User(
     image_url="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
 )
 
-db.session.add_all([u1, u2])
 db.session.commit()
