@@ -103,3 +103,23 @@ def logout_route():
     logout_user()
     flash("Successfully Logged out!", "info")
     return redirect('/')
+
+
+@app.route('/users/<int:id>')
+def user_home_page(id):
+    """Route user to home page of specified user if friends with user or in study group with user
+    if the user is not logged in redirect to home page
+    """
+    user = User.query.get_or_404(id)
+    if user:
+        return render_template("user_homepage.html", user=user)
+
+    return redirect("/")
+
+@app.route('/users/dashboard/<int:id>')
+def user_dashboard(id):
+    """Route user to dashboard if logged in user is authenticated.
+    If the user is not logged or trying to get to another user's dashboard redirect them to the home page
+    """
+
+    return redirect("/")

@@ -10,6 +10,10 @@
     height: 100vh;
     font-family: 'Open Sans', sans-serif;
 }
+.content {
+    display: flex;
+    justify-content: center;
+}
 
 .outer-nav-container{
     display: flex;
@@ -31,4 +35,26 @@
     text-decoration: none;
     color: aliceblue;
 
+}
+
+
+/*User profile styling*/
+.user-profile-heading {
+    margin-top: 20px;
+    padding: 10px;
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+    height: 200px;
+    background-color: dodgerblue; /*NEED TO CHANGE USING TO ADJUST LAYOUT*/
+
+}
+
+.user-profile-image {
+    margin-left: 25px;
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50%;
 }
