@@ -27,8 +27,17 @@ class UserViewsTestCase(TestCase):
 
     def test_user_signup(self):
         with self.client as c:
-            resp = c.get('/signup')
+            resp = c.get("/signup")
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Sign up for", html)
+
+    def test_user_login(self):
+        with self.client as c:
+            resp = c.get("/login")
+
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Login", html)

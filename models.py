@@ -39,3 +39,18 @@ class User(db.Model):
 
         db.session.add(user)
         return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """
+        Check username and password match database user information.
+        If unable to find matching user, or if password is wrong it should return False.
+        """
+        user = cls.query.filter_by(username=username).first()
+
+        if user:
+            is_authenticated = bcrypt.check_password_hash(user.password, password)
+            if is_authenticated:
+                return user
+
+        return False

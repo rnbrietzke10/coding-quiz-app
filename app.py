@@ -3,7 +3,7 @@ from flask import Flask, render_template, redirect, session, flash, g
 from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User
-from forms import SignUpForm
+from forms import SignUpForm, LoginForm
 
 app = Flask(__name__)
 
@@ -69,11 +69,37 @@ def signup_route():
         except IntegrityError:
             db.session.rollback()
             if User.query.filter(User.email == form.email.data).first():
-                flash("Email is already taken", "db-error")
+                flash("Email is already taken", "danger")
             if User.query.filter(User.username == form.username.data).first():
-                flash("Username is already taken", "db-error")
+                flash("Username is already taken", "danger")
             return render_template('signup_page.html', form=form)
         login_user(user)
         return redirect('/')
     else:
         return render_template('signup_page.html', form=form)
+
+
+@app.route('/login', methods=["GET", "POST"])
+def user_login_route():
+    """
+    Show login form for GET request
+    POST request authenticate users credentials
+    """
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data,
+                                 form.password.data)
+        if user:
+            login_user(user)
+            flash(f"Welcome Back, {user.first_name}!", "success")
+            return redirect(f"/users/{user.id}")
+        flash("Invalid credentials.", 'danger')
+    return render_template("login_page.html", form=form)
+
+
+@app.route("/logout")
+def logout_route():
+    """Handle user logout"""
+    logout_user()
+    flash("Successfully Logged out!", "info")
+    return redirect('/')
