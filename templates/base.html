@@ -4,22 +4,42 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/bootstrap/dist/css/bootstrap.css"
+    />
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/popper"></script>
+    <script src="https://unpkg.com/bootstrap"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/app.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}"/>
+    {#    <link rel="stylesheet" href="../static/app.css">#}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div class="container">
+<div class="wrapper">
     <nav class="outer-nav-container">
         <div class="nav-heading-container">Coding Quizzes</div>
 
         <div class="nav-links-container">
             <a href="/" class="nav-links">Home</a>
-            <a href="/signup" class="nav-links">Sign Up</a>
-            <a href="/login" class="nav-links">Login</a>
-            <a href="/contact" class="nav-links">Contact Us</a>
+            {% if not g.user %}
+                <a href="/signup" class="nav-links">Sign Up</a>
+                <a href="/login" class="nav-links">Login</a>
+            {% else %}
+
+                {#                <a href="/users/dashboard/{{g.user.id}}"  class="nav-links" >New Message</a>#}
+                <a href="/logout" class="nav-links">Log out</a>
+                <a href="/users" class="nav-links">Users</a>
+                <a href="/users/dashboard/{{ g.user.id }}" class="nav-links">
+                    <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}" class="circular-profile-image"
+                         id="nav-profile-image"/>
+                </a>
+
+            {% endif %}
+
         </div>
     </nav>
     <div class="content">
