@@ -8,11 +8,10 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User
 from forms import SignUpForm, LoginForm
 
-
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///quiz_app_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+agipp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -21,6 +20,7 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 
 API_KEY = environ.get('API_KEY')
+
 
 # Check if user in session
 @app.before_request
@@ -111,11 +111,11 @@ def logout_route():
 
 
 @app.route('/users/profile/<int:id>')
-def user_home_page(id):
+def user_home_page(user_id):
     """Route user to home page of specified user if friends with user or in study group with user
     if the user is not logged in redirect to home page
     """
-    user = User.query.get_or_404(id)
+    user = User.query.get_or_404(user_id)
     if user:
         return render_template("user_homepage.html", user=user)
 
@@ -123,11 +123,11 @@ def user_home_page(id):
 
 
 @app.route('/users/dashboard/<int:id>')
-def user_dashboard(id):
+def user_dashboard(user_id):
     """Route user to dashboard if logged-in user is authenticated.
     If the user is not logged or trying to get to another user's dashboard redirect them to the home page
     """
-    user = User.query.get_or_404(id)
+    user = User.query.get_or_404(user_id)
     if user:
         return render_template("user_homepage.html", user=user)
 
