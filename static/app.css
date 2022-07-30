@@ -12,12 +12,14 @@
 }
 
 .content {
+    height: 100%;
     margin-top: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
 }
 
+/******************* Nav bar styling *******************/
 .outer-nav-container {
     display: flex;
     justify-content: space-between;
@@ -29,27 +31,57 @@
 .nav-heading-container {
     margin-left: 20px;
 }
+.nav-heading-container h2{
+    color: aliceblue;
+}
 
 .nav-links-container {
     display: flex;
     min-width: 30%;
-    justify-content: space-evenly;
     align-items: center;
 }
 
 .nav-links {
     text-decoration: none;
     color: aliceblue;
+    margin-right: 40px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: 0.5s;
 
 }
+
+.nav-links:hover {
+    background-color: aliceblue;
+    color: steelblue;
+    transition: 0.5s;
+    text-decoration: none;
+
+
+}
+
 
 #nav-profile-image {
     height: 50px;
     width: 50px;
 }
 
+/******************* Form Styling *******************/
+form {
+    margin-top: 30px;
+    width: 50%;
+}
 
-/*User profile styling*/
+.input-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+/******************* User profile styling *******************/
 .user-profile-heading {
     margin-top: 20px;
     padding: 10px;
@@ -73,4 +105,5 @@
     height: 100px;
     width: 100px;
 }
+
 

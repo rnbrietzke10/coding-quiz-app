@@ -1,9 +1,13 @@
 import os
+import json
+from os import environ
+import requests
 from flask import Flask, render_template, redirect, session, flash, g
 from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User
 from forms import SignUpForm, LoginForm
+
 
 app = Flask(__name__)
 
@@ -16,6 +20,7 @@ debug = DebugToolbarExtension(app)
 
 connect_db(app)
 
+API_KEY = environ.get('API_KEY')
 
 # Check if user in session
 @app.before_request
@@ -119,7 +124,7 @@ def user_home_page(id):
 
 @app.route('/users/dashboard/<int:id>')
 def user_dashboard(id):
-    """Route user to dashboard if logged in user is authenticated.
+    """Route user to dashboard if logged-in user is authenticated.
     If the user is not logged or trying to get to another user's dashboard redirect them to the home page
     """
     user = User.query.get_or_404(id)
@@ -127,3 +132,20 @@ def user_dashboard(id):
         return render_template("user_homepage.html", user=user)
 
     return redirect("/")
+
+
+@app.route('/quiz')
+def quiz_page():
+    """Get random quiz questions
+    res.content returns a byte string and then is converted into a python dictionary using json.loads()
+    """
+    headers = {
+        'X-Api-Key': API_KEY,
+    }
+    res = requests.get('https://quizapi.io/api/v1/questions', headers=headers)
+
+    res_json = res.content
+    print(type(res.content))
+    data = json.loads(res_json)
+
+    return render_template('quiz.html', data=data)
