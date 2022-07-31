@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, session, flash, g
 from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User
-from forms import SignUpForm, LoginForm
+from forms import SignUpForm, LoginForm, UpdateProfileForm, CreateQuizForm
 
 app = Flask(__name__)
 
@@ -136,7 +136,19 @@ def user_dashboard(user_id):
     return redirect("/")
 
 
-@app.route('/quiz')
+@app.route('/quiz', methods=["GET", "POST"])
+def quiz_creation_page():
+    """
+    Pick quiz topic, number of questions, and difficulty
+    """
+    form = CreateQuizForm()
+    if form.validate_on_submit():
+        return redirect('/user/quiz')
+
+    return render_template('quiz_form.html', form=form)
+
+
+@app.route('/user/quiz')
 def quiz_page():
     """Get random quiz questions
     res.content returns a byte string and then is converted into a python dictionary using json.loads()

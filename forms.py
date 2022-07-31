@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import Form, StringField, PasswordField, validators
+from wtforms import StringField, PasswordField, SelectField, validators
 
 
 class SignUpForm(FlaskForm):
@@ -25,3 +25,14 @@ class UpdateProfileForm(FlaskForm):
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
     password = PasswordField("Password", [validators.DataRequired(validators.Length(min=8))])
     image_url = StringField('(Optional) Image URL')
+
+
+class CreateQuizForm(FlaskForm):
+    """Form to select quiz topic, number of questions and difficulty"""
+    topic = SelectField('Quiz Topics', choices=[('docker', 'Docker'), ('devops', 'DevOps'), ('laravel', 'Laravel'),
+                                                ('html', 'HTML'), ('php', 'PHP'), ('javascript', 'JavaScript'),
+                                                ('wordpress', 'WordPress'), ('bash', 'Bash'),
+                                                ('random', 'Random Questions')])
+    question_length = SelectField('Number of Questions', choices=[(5, 5), (10, 10), (15, 15), (20, 20)])
+    difficulty = SelectField('Question Difficulty', choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard'),
+                                                             ('random', 'Random')])
