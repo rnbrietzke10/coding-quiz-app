@@ -11,7 +11,7 @@ from forms import SignUpForm, LoginForm
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///quiz_app_db'
-agipp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -67,9 +67,10 @@ def signup_route():
 
     form = SignUpForm()
     if form.validate_on_submit():
+
         try:
             user = User.sign_up(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                                username=form.username.data, password=form.password.data, image_url=form.image_url.data)
+                                username=form.username.data, password=form.password.data)
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
@@ -110,7 +111,7 @@ def logout_route():
     return redirect('/')
 
 
-@app.route('/users/profile/<int:id>')
+@app.route('/users/profile/<int:user_id>')
 def user_home_page(user_id):
     """Route user to home page of specified user if friends with user or in study group with user
     if the user is not logged in redirect to home page
@@ -122,13 +123,14 @@ def user_home_page(user_id):
     return redirect("/")
 
 
-@app.route('/users/dashboard/<int:id>')
+@app.route('/users/dashboard/<int:user_id>')
 def user_dashboard(user_id):
     """Route user to dashboard if logged-in user is authenticated.
     If the user is not logged or trying to get to another user's dashboard redirect them to the home page
     """
     user = User.query.get_or_404(user_id)
     if user:
+        print("Image url: ", user.image_url)
         return render_template("user_homepage.html", user=user)
 
     return redirect("/")
