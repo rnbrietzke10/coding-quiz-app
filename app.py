@@ -20,6 +20,7 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 
 API_KEY = environ.get('API_KEY')
+BASE_URL = 'https://quizapi.io/api/v1/questions'
 
 
 # Check if user in session
@@ -143,23 +144,48 @@ def quiz_creation_page():
     """
     form = CreateQuizForm()
     if form.validate_on_submit():
-        return redirect('/user/quiz')
+        """Get random quiz questions
+            res.content returns a byte string and then is converted into a python dictionary using json.loads()
+            """
+
+        params = {
+            'limit': int(form.limit.data),
+        }
+        print("Type Tag: ", type(form.tags.data))
+        print("Type Difficultly: ", type(form.difficulty.data))
+        print("Tags: ", form.tags.data != 'None')
+        print("Difficulty: ", form.difficulty.data != 'None')
+        if form.tags.data != 'None':
+            params['tags'] = form.tags.data
+        if form.difficulty.data != 'None':
+            params['difficulty'] = form.difficulty.data
+
+        print("Params: ", params)
+        headers = {
+            'X-Api-Key': API_KEY,
+        }
+        res = requests.get(BASE_URL, headers=headers, params=params)
+        print(res.url)
+
+        res_json = res.content
+        print(type(res.content))
+        data = json.loads(res_json)
+        return render_template('quiz.html', data=data)
 
     return render_template('quiz_form.html', form=form)
 
-
-@app.route('/user/quiz')
-def quiz_page():
-    """Get random quiz questions
-    res.content returns a byte string and then is converted into a python dictionary using json.loads()
-    """
-    headers = {
-        'X-Api-Key': API_KEY,
-    }
-    res = requests.get('https://quizapi.io/api/v1/questions', headers=headers)
-
-    res_json = res.content
-    print(type(res.content))
-    data = json.loads(res_json)
-
-    return render_template('quiz.html', data=data)
+# @app.route('/user/quiz')
+# def quiz_page():
+#     """Get random quiz questions
+#     res.content returns a byte string and then is converted into a python dictionary using json.loads()
+#     """
+#     headers = {
+#         'X-Api-Key': API_KEY,
+#     }
+#     res = requests.get(BASE_URL, headers=headers, )
+#
+#     res_json = res.content
+#     print(type(res.content))
+#     data = json.loads(res_json)
+#
+#     return render_template('quiz.html', data=data)

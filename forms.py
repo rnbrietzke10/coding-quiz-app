@@ -29,10 +29,10 @@ class UpdateProfileForm(FlaskForm):
 
 class CreateQuizForm(FlaskForm):
     """Form to select quiz topic, number of questions and difficulty"""
-    topic = SelectField('Quiz Topics', choices=[('docker', 'Docker'), ('devops', 'DevOps'), ('laravel', 'Laravel'),
+    tags = SelectField('Quiz Topics', choices=[('docker', 'Docker'), ('devops', 'DevOps'), ('laravel', 'Laravel'),
                                                 ('html', 'HTML'), ('php', 'PHP'), ('javascript', 'JavaScript'),
                                                 ('wordpress', 'WordPress'), ('bash', 'Bash'),
-                                                ('random', 'Random Questions')])
-    question_length = SelectField('Number of Questions', choices=[(5, 5), (10, 10), (15, 15), (20, 20)])
+                                                (None, 'Random Questions')])
+    limit = SelectField('Number of Questions', choices=[(5, 5), (10, 10), (15, 15), (20, 20)])
     difficulty = SelectField('Question Difficulty', choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard'),
-                                                             ('random', 'Random')])
+                                                             (None, 'Random')])
