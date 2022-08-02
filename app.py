@@ -151,43 +151,22 @@ def quiz_creation_page():
         params = {
             'limit': int(form.limit.data),
         }
-        print("Type Tag: ", type(form.tags.data))
-        print("Type Difficultly: ", type(form.difficulty.data))
-        print("Tags: ", form.tags.data != 'None')
-        print("Difficulty: ", form.difficulty.data != 'None')
         if form.tags.data != 'None':
             params['tags'] = form.tags.data
         if form.difficulty.data != 'None':
             params['difficulty'] = form.difficulty.data
 
-        print("Params: ", params)
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) '
                           'Chrome/50.0.2661.102 Safari/537.36',
             'X-Api-Key': API_KEY,
         }
         res = requests.get(BASE_URL, headers=headers, params=params)
-        print(res.url)
-        print(res.raise_for_status())
+
         res_json = res.content
-        print(type(res.content))
         data = json.loads(res_json)
         return render_template('quiz.html', data=data)
 
     return render_template('quiz_form.html', form=form)
 
-# @app.route('/user/quiz')
-# def quiz_page():
-#     """Get random quiz questions
-#     res.content returns a byte string and then is converted into a python dictionary using json.loads()
-#     """
-#     headers = {
-#         'X-Api-Key': API_KEY,
-#     }
-#     res = requests.get(BASE_URL, headers=headers, )
-#
-#     res_json = res.content
-#     print(type(res.content))
-#     data = json.loads(res_json)
-#
-#     return render_template('quiz.html', data=data)
+
