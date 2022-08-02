@@ -162,11 +162,13 @@ def quiz_creation_page():
 
         print("Params: ", params)
         headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/50.0.2661.102 Safari/537.36',
             'X-Api-Key': API_KEY,
         }
         res = requests.get(BASE_URL, headers=headers, params=params)
         print(res.url)
-
+        print(res.raise_for_status())
         res_json = res.content
         print(type(res.content))
         data = json.loads(res_json)
