@@ -31,7 +31,8 @@
 .nav-heading-container {
     margin-left: 20px;
 }
-.nav-heading-container h2{
+
+.nav-heading-container h2 {
     color: aliceblue;
 }
 
@@ -72,7 +73,7 @@ form {
     width: 50%;
 }
 
-.input-container{
+.input-container {
     display: flex;
     flex-direction: column;
 }
@@ -107,3 +108,22 @@ form {
 }
 
 
+/* Quiz Page */
+
+.quiz-container {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/
+
+}
+
+.answer-choice-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1px;
+}
+
+.checkbox-hidden {
+   visibility: hidden;
+}

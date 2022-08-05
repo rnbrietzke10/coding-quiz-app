@@ -1,11 +1,15 @@
 {% extends 'base.html' %} {% block title %}Home Page{% endblock %} {% block
 content %}
-<div class="user-profile-heading">
-<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+    <div class="user-profile-heading">
+        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
 
-    <img src="{{ user.image_url }}" alt="{{ user.first_name }}'s profile picture" class="user-profile-image circular-profile-image">
+        <img src="{{ user.image_url }}" alt="{{ user.first_name }}'s profile picture"
+             class="user-profile-image circular-profile-image">
 
-</div>
+    </div>
+    <form action="/quiz">
+        <button class="btn btn-outline-primary" type="submit">Take Quiz!</button>
+    </form>
 
 
 {% endblock %}

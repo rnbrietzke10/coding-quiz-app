@@ -1,15 +1,33 @@
 {% extends 'base.html' %} {% block title %}Home Page{% endblock %} {% block
 content %}
-    {#<div class="user-profile-heading">#}
-    {#<h1>{{ user.first_name }} {{ user.last_name }}</h1>#}
-    {#    <img src="{{ user.image_url }}" alt="{{ user.first_name }}'s profile picture" class="user-profile-image circular-profile-image">#}
-    {#</div>#}
+    <div class="user-profile-heading">
+        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+        <img src="{{ user.image_url }}" alt="{{ user.first_name }}'s profile picture"
+             class="user-profile-image circular-profile-image">
+    </div>
     <div class="quiz-container">
         {% for question in data %}
-            <p> {{ question.question }} </p>
+            <div class="question-container">
+                <p> {{ question.question }} </p>
+            </div>
+            <div class="answer-choice-container">
+                {% for answer in question.answers %}
+                    {% if  question.answers.get(answer) != None %}
+                        <div class="choice-container">
+                            <div id="{{ question.id }}-{{ answer }}">{{ question.answers.get(answer) }}</div>
+                        </div>
+
+
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% if question.get('multiple_correct_answers') == True %}
+                <div>More than 1 correct answer choice</div>
+            {% endif %}
 
         {% endfor %}
     </div>
+
 
 
 {% endblock %}
