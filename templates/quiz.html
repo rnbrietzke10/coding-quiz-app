@@ -7,14 +7,15 @@ content %}
     </div>
     <div class="quiz-container">
         {% for question in data %}
-            <div class="question-container">
-                <p> {{ question.question }} </p>
+            <div class="qa-container">
+             <div class="question-container">
+                <p class="question-text"> {{ question.question }} </p>
             </div>
             <div class="answer-choice-container">
                 {% for answer in question.answers %}
                     {% if  question.answers.get(answer) != None %}
                         <div class="choice-container">
-                            <div id="{{ question.id }}-{{ answer }}">{{ question.answers.get(answer) }}</div>
+                            <div id="{{ question.id }}-{{ answer }}" class="choice-text">{{ question.answers.get(answer) }}</div>
                         </div>
 
 
@@ -25,7 +26,10 @@ content %}
                 <div>More than 1 correct answer choice</div>
             {% endif %}
 
-        {% endfor %}
+
+            </div>
+       {% endfor %}
+
     </div>
 
 

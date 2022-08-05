@@ -91,7 +91,7 @@ form {
     flex-direction: column;
     align-items: flex-end;
     height: 200px;
-    background-color: dodgerblue; /*NEED TO CHANGE USING TO ADJUST LAYOUT*/
+
 
 }
 
@@ -118,12 +118,35 @@ form {
 
 }
 
+.qa-container{
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.question-text {
+    font-size: 2rem;
+}
+
 .answer-choice-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-column-gap: 1px;
+    grid-column-gap: 30px;
+
 }
 
-.checkbox-hidden {
-   visibility: hidden;
+.choice-container {
+    margin-bottom: 5px;
+
+}
+
+.choice-text {
+    background-color: aliceblue;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.selected {
+    background-color: green;
+    color: #fff;
 }
