@@ -8,30 +8,28 @@ content %}
     <div class="quiz-container">
         {% for question in data %}
             <div class="qa-container">
-             <div class="question-container">
-                <p class="question-text"> {{ question.question }} </p>
+                <div class="question-container">
+                    <p class="question-text"> {{ question.question }} </p>
+                </div>
+                <div class="answer-choice-container">
+                    {% for answer in question.answers %}
+                        {% if  question.answers.get(answer) != None %}
+                            <div class="choice-container">
+                                <div id="{{ question.id }}-{{ answer }}"
+                                     class="choice-text">{{ question.answers.get(answer) }}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% if question.get('multiple_correct_answers') == True %}
+                    <div>More than 1 correct answer choice</div>
+                {% endif %}
             </div>
-            <div class="answer-choice-container">
-                {% for answer in question.answers %}
-                    {% if  question.answers.get(answer) != None %}
-                        <div class="choice-container">
-                            <div id="{{ question.id }}-{{ answer }}" class="choice-text">{{ question.answers.get(answer) }}</div>
-                        </div>
-
-
-                    {% endif %}
-                {% endfor %}
-            </div>
-            {% if question.get('multiple_correct_answers') == True %}
-                <div>More than 1 correct answer choice</div>
-            {% endif %}
-
-
-            </div>
-       {% endfor %}
-
+        {% endfor %}
     </div>
-
+    <div class="quiz-btn-container">
+        <button id="submit" class="btn btn-primary">Submit</button>
+    </div>
 
 
 {% endblock %}

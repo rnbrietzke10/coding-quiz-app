@@ -150,3 +150,7 @@ form {
     background-color: green;
     color: #fff;
 }
+
+.quiz-btn-container {
+   height: 100px;
+}
