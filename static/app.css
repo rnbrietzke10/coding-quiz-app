@@ -67,6 +67,35 @@
     width: 50px;
 }
 
+/******************* Home Page Styling *******************/
+.home-content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.topics-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    max-width: 950px;
+}
+
+.topic-container{
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+
+
 /******************* Form Styling *******************/
 form {
     margin-top: 30px;
