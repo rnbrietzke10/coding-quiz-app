@@ -27,46 +27,9 @@ $choice.on("click",
     })
 
 
-// Get data from flask
-
-$takeQuizBtn = $("#take-quiz")
-
-$takeQuizBtn.on('click', async function () {
-        await getQuizData()
-        console.log('Clicked')
-        // addQuestion(0)
-    }
-);
 
 
-async function getQuizData() {
-    try {
-        const response = await axios.get('/quiz-data')
-        console.log(response.data)
-        localStorage.setItem("questions", JSON.stringify(response.data))
-    } catch (error) {
-        console.log(error);
-    }
-}
 
-const questions = JSON.parse(localStorage.getItem('questions'))
-
-function addQuestion(idx) {
-    const $contentDiv = $('.content')
-    $takeQuizBtn.remove()
-    $contentDiv.append(`<div id="q-idx"><h3>Question 1</h3>${questions[idx].question}</div> <div class="answer-choice-container">
-                </div> `)
-    $contentDiv.append(`<div><button class="btn btn-secondary mx-1" id="prev-btn">Prev</button><button class="btn btn-primary" id="next-btn">Next</button></div>`)
-
-}
-
-
-    /*
-    *
-                <div class="choice-container"><div id="${questions[idx].id}-b" class="choice-text">${questions[idx].answers.answer_b}</div></div>
-                <div class="choice-container"><div id="${questions[idx].id}-c" class="choice-text">${questions[idx].answers.answer_c}</div></div>
-                <div class="choice-container"><div id="${questions[idx].id}-d" class="choice-text">${questions[idx].answers.answer_d}</div></div>
-    * */
 
 /**
  * localStorage.questions
@@ -80,3 +43,43 @@ function addQuestion(idx) {
  * q[1].question
  * 'What does HPA stand for in Kubernetes?'
  */
+
+
+$('#submit-quiz-btn').on('click', async function(){
+    const response = await axios.post('/quiz-results-data', {answers: answeredQuestions}).then(function (response) {
+    console.log("CORRECT RESPONSES",response.data['correct_questions']);
+    console.log("INCORRECT RESPONSES", response.data['missed_questions']);
+    console.log("DID NOT ANSWER", response.data['did_not_answer']);
+    createResultElements(response.data)
+    })
+.catch(function (error) {
+        console.log(error);
+    });
+})
+
+
+function createResultElements(data) {
+    $('.qa-container').remove()
+    $('.quiz-container').append('<div class="results-container" id="questions-correct" ><h3>Correct Answers</h3></div>')
+    $('.quiz-container').append('<div class="results-container" id="questions-wrong" ><h3>Wrong Answers</h3></div>')
+    $('.quiz-container').append('<div class="results-container" id="did-not-answer" ><h3>Did NotAnswer</h3></div>')
+    console.log(data)
+    if(data['correct_questions']){
+        for (let i = 0; i < data['correct_questions'].length; i++){
+            console.log('INSIDE FOR LOOP')
+            $('#questions-correct').append(`<div class="answer correct">${data['correct_questions'][i]}</div>`)
+        }
+    }
+
+    if(data['missed_questions']){
+        for (let i = 0; i < data['missed_questions'].length; i++){
+            $('#questions-wrong').append(`<div class="answer wrong">${data['missed_questions'][i]}</div>`)
+        }
+    }
+
+    if(data['did_not_answer']){
+        for (let i = 0; i < data['did_not_answer'].length; i++){
+            $('#did-not-answer').append(`<div class="answer no-answer">${data['did_not_answer'][i]}</div>`)
+        }
+    }
+}
