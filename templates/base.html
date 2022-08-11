@@ -31,10 +31,8 @@
                 <a href="/signup" class="nav-links">Sign Up</a>
                 <a href="/login" class="nav-links">Login</a>
             {% else %}
-
-                {#                <a href="/users/dashboard/{{g.user.id}}"  class="nav-links" >New Message</a>#}
                 <a href="/logout" class="nav-links">Log out</a>
-                <a href="/users" class="nav-links">Users</a>
+                <a href="/users/dashboard/{{ g.user.id }}/edit" class="nav-links">Edit Profile</a>
                 <a href="/users/dashboard/{{ g.user.id }}" class="nav-links">
                     <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}" class="circular-profile-image"
                          id="nav-profile-image"/>

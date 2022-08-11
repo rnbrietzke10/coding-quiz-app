@@ -183,16 +183,21 @@ form {
     height: 100px;
 }
 
+.results-container {
+    margin: 15px 0;
+}
 
 .answer {
     min-height: 50px;
     border-radius: 10px;
     padding: 10px 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+
 }
 
+
 .correct {
-    background-color: #83f28f;
+    background-color: #028A0F;
     border: 1px solid darkgreen;
      color: #fff;
 }
@@ -211,10 +216,12 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
+     margin-top: 15px;
 }
 
 .suggested-videos{
     display: flex;
     width: 100%;
     justify-content: space-evenly;
+    margin-top: 15px;
 }
