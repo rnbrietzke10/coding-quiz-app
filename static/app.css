@@ -206,3 +206,15 @@ form {
 .no-answer {
     border: 1px solid orange;
 }
+
+.suggested-videos-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.suggested-videos{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}

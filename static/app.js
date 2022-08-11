@@ -8,12 +8,12 @@ $choice.on("click",
         let id = choiceIdArray[0]
         let choice = choiceIdArray[1]
         console.log(id)
-        if(id in answeredQuestions && !$(evt.target).hasClass('selected')){
+        if (id in answeredQuestions && !$(evt.target).hasClass('selected')) {
             answeredQuestions[id].push(choice)
         } else if (!$(evt.target).hasClass('selected')) {
-             answeredQuestions[id] = [choice]
+            answeredQuestions[id] = [choice]
         }
-        if(id in answeredQuestions && $(evt.target).hasClass('selected')){
+        if (id in answeredQuestions && $(evt.target).hasClass('selected')) {
             let idxChoice = answeredQuestions[id].indexOf(choice)
             console.log(idxChoice)
             answeredQuestions[id].splice(idxChoice, 1)
@@ -25,10 +25,6 @@ $choice.on("click",
         $(evt.target).toggleClass("selected")
 
     })
-
-
-
-
 
 
 /**
@@ -45,41 +41,50 @@ $choice.on("click",
  */
 
 
-$('#submit-quiz-btn').on('click', async function(){
+$('#submit-quiz-btn').on('click', async function () {
     const response = await axios.post('/quiz-results-data', {answers: answeredQuestions}).then(function (response) {
-    console.log("CORRECT RESPONSES",response.data['correct_questions']);
-    console.log("INCORRECT RESPONSES", response.data['missed_questions']);
-    console.log("DID NOT ANSWER", response.data['did_not_answer']);
-    createResultElements(response.data)
+        console.log("CORRECT RESPONSES", response.data['correct_questions']);
+        console.log("INCORRECT RESPONSES", response.data['missed_questions']);
+        console.log("DID NOT ANSWER", response.data['did_not_answer']);
+        createResultElements(response.data)
     })
-.catch(function (error) {
-        console.log(error);
-    });
+        .catch(function (error) {
+            console.log(error);
+        });
 })
 
 
 function createResultElements(data) {
     $('.qa-container').remove()
-    $('.quiz-container').append('<div class="results-container" id="questions-correct" ><h3>Correct Answers</h3></div>')
-    $('.quiz-container').append('<div class="results-container" id="questions-wrong" ><h3>Wrong Answers</h3></div>')
-    $('.quiz-container').append('<div class="results-container" id="did-not-answer" ><h3>Did NotAnswer</h3></div>')
+    $('.quiz-btn-container').remove()
+
+
     console.log(data)
-    if(data['correct_questions']){
-        for (let i = 0; i < data['correct_questions'].length; i++){
+    if (data['correct_questions'].length !== 0) {
+        $('.quiz-container').append('<div class="results-container" id="questions-correct" ><h3>Correct Answers</h3></div>')
+        for (let i = 0; i < data['correct_questions'].length; i++) {
             console.log('INSIDE FOR LOOP')
             $('#questions-correct').append(`<div class="answer correct">${data['correct_questions'][i]}</div>`)
         }
     }
 
-    if(data['missed_questions']){
-        for (let i = 0; i < data['missed_questions'].length; i++){
+    if (data['missed_questions'].length !== 0) {
+        $('.quiz-container').append('<div class="results-container" id="questions-wrong" ><h3>Wrong Answers</h3></div>')
+        for (let i = 0; i < data['missed_questions'].length; i++) {
             $('#questions-wrong').append(`<div class="answer wrong">${data['missed_questions'][i]}</div>`)
         }
     }
 
-    if(data['did_not_answer']){
-        for (let i = 0; i < data['did_not_answer'].length; i++){
+    if (data['did_not_answer'].length !== 0) {
+        $('.quiz-container').append('<div class="results-container" id="did-not-answer" ><h3>Did NotAnswer</h3></div>')
+        for (let i = 0; i < data['did_not_answer'].length; i++) {
             $('#did-not-answer').append(`<div class="answer no-answer">${data['did_not_answer'][i]}</div>`)
+        }
+    }
+    if (data['suggested_videos']) {
+        $('#questions-wrong').append(`<div class="suggested-videos-container"><h3>Suggested Videos</h3><div class="suggested-videos"></div></div>`)
+        for (let i = 0; i < data['suggested_videos'].length; i++) {
+            $('.suggested-videos').append(`<div class="video"><a href="https://www.youtube.com/watch?v=${data['suggested_videos'][i][1]}" target="_blank" ><img src="${data['suggested_videos'][i][0]}" alt="Suggested Video ${i + 1}"></a></div>`)
         }
     }
 }
