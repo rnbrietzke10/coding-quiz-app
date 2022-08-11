@@ -194,9 +194,7 @@ def check_answers(results):
         'missed_questions': [],
         'correct_questions': [],
         'did_not_answer': [],
-        'suggested_videos': [['https://i.ytimg.com/vi/HCQxjQoeWpg/default.jpg', 'HCQxjQoeWpg'],
-                             ['https://i.ytimg.com/vi/dxHTkqSpz-w/default.jpg', 'dxHTkqSpz-w'],
-                             ['https://i.ytimg.com/vi/ozS7R0vfsEM/default.jpg', 'ozS7R0vfsEM']]
+        'suggested_videos': []
     }
     """
     video data for styling
@@ -218,17 +216,20 @@ def check_answers(results):
             if question['question'] not in checked_answers['missed_questions'] and question['question'] not in \
                     checked_answers['correct_questions']:
                 checked_answers['did_not_answer'].append(question['question'])
-    checked_answers['score'] = round((len(checked_answers['correct_questions']) / checked_answers['num_questions']) * 100)
-    # if len(checked_answers['missed_questions']) != 0:
-    #     idx = random.randint(0, len(checked_answers['missed_questions']) - 1)
-    #     youtube_suggestions = request_youtube_api(checked_answers['missed_questions'][idx])
-    #     checked_answers['suggested_videos'] = youtube_suggestions
-    #     print(checked_answers)
-    # else:
-    #     if session['data']['tags'][0]['name']:
-    #         youtube_suggestions = request_youtube_api(session['data']['tags'][0]['name'])
-    #     elif session['data']['category']:
-    #         youtube_suggestions = request_youtube_api(session['data']['category'])
+    checked_answers['score'] = round(
+        (len(checked_answers['correct_questions']) / checked_answers['num_questions']) * 100)
+    if len(checked_answers['missed_questions']) != 0:
+        idx = random.randint(0, len(checked_answers['missed_questions']) - 1)
+        youtube_suggestions = request_youtube_api(checked_answers['missed_questions'][idx])
+        checked_answers['suggested_videos'] = youtube_suggestions
+        print(checked_answers)
+    else:
+        idx = random.randint(0, len(session['data']) - 1)
+        if session['data'][idx]['tags']['name']:
+            youtube_suggestions = request_youtube_api(session['data'][idx]['tags'][0]['name'])
+        elif session['data'][idx]['category']:
+            youtube_suggestions = request_youtube_api(session['data'][idx]['category'])
+
     return checked_answers
 
 
