@@ -6,7 +6,7 @@ import requests
 from flask import Flask, render_template, redirect, session, flash, g, jsonify, request
 from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, db, User
+from models import connect_db, db, User, QuizData
 from forms import SignUpForm, LoginForm, UpdateProfileForm, CreateQuizForm
 
 app = Flask(__name__)
@@ -137,12 +137,13 @@ def quiz_creation_page():
         """Get random quiz questions
             res.content returns a byte string and then is converted into a python dictionary using json.loads()
             """
-
+        # Store tag for database
+        session["category"] = form.tags.data
         params = {
             'limit': int(form.limit.data),
         }
         if form.tags.data != 'None':
-            params['tags'] = form.tags.data
+            params['tags'] = session["category"]
         if form.difficulty.data != 'None':
             params['difficulty'] = form.difficulty.data
 
@@ -156,6 +157,11 @@ def quiz_creation_page():
         res_json = res.content
         data = json.loads(res_json)
         session['data'] = data
+
+        if type(data) is dict:
+            flash("No Questions found at that difficulty level. Pick a different or random difficultly level", "danger")
+            return render_template('quiz_form.html', form=form)
+
         return render_template('quiz.html', data=data, user=user)
 
     return render_template('quiz_form.html', form=form)
@@ -229,7 +235,7 @@ def check_answers(results):
             youtube_suggestions = request_youtube_api(session['data'][idx]['tags'][0]['name'])
         elif session['data'][idx]['category']:
             youtube_suggestions = request_youtube_api(session['data'][idx]['category'])
-
+    store_quiz_data(checked_answers)
     return checked_answers
 
 
@@ -266,4 +272,15 @@ def form_error(form):
         flash("Username is already taken", "danger")
 
 
+def store_quiz_data(obj):
+    """Store quiz data in quizzes_data table"""
+    try:
+        data = QuizData(quiz_category=session["category"], score=obj["score"],
+                        correct_questions=obj['correct_questions'],
+                        missed_questions=obj['missed_questions'], unanswered_questions=obj['did_not_answer'],
+                        suggested_videos=obj['suggested_videos'], user_id=g.user.id)
 
+        db.session.add(data)
+        db.session.commit()
+    except IntegrityError:
+        return redirect(f'/users/dashboard/{g.user.id}')
