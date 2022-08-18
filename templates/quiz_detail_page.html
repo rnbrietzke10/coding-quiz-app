@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block title %}Home Page{% endblock %} {% block
+content %}
+    <div class="quiz-container">
+
+        <h3>{{ quiz_data.quiz_category }} Quiz</h3>
+        <p>Score: {{ quiz_data.score }}</p>
+        <div class="questions-container">
+            <div class="results-container" id="questions-correct"><h3>Correct Answers</h3>
+                {% for question in quiz_data.correct_questions %}
+                    <div class="answer correct">{{ question }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="questions-container">
+            <div class="results-container" id="questions-wrong"><h3>Wrong Answers</h3>
+                {% for question in quiz_data.missed_questions %}
+                    <div class="answer wrong">{{ question }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="suggested-videos-container"><h3>Suggested Videos</h3>
+            <div class="suggested-videos">
+                {% for video in video_images_ids %}
+                    <div class="video"><a href="https://www.youtube.com/watch?v={{ video[1] }}"
+                                          target="_blank"><img src="{{ video[0] }}"
+                                                               alt="Suggested video"/></a></div>`
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

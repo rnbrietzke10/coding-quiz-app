@@ -120,7 +120,7 @@ def user_dashboard(user_id):
     user_quiz_data = user.quizzes_data
     if user:
         print("Image url: ", user.image_url)
-        return render_template("user_homepage.html", user=user, user_quiz_data=user_quiz_data )
+        return render_template("user_homepage.html", user=user, user_quiz_data=user_quiz_data)
 
     return redirect("/")
 
@@ -237,6 +237,7 @@ def check_answers(results):
             youtube_suggestions = request_youtube_api(session['data'][idx]['tags'][0]['name'])
         elif session['data'][idx]['category']:
             youtube_suggestions = request_youtube_api(session['data'][idx]['category'])
+    checked_answers['suggested_videos'] = youtube_suggestions
     store_quiz_data(checked_answers)
     return checked_answers
 
@@ -265,10 +266,37 @@ def quiz_results_page(user_id):
     if user.id == g.user.id:
         return render_template('edit_user_info.html', form=form)
 
-@app.route('/quiz-data/<int:id>')
-def quiz_detail_page(id):
+
+@app.route('/quiz-data/<int:quiz_id>')
+def quiz_detail_page(quiz_id):
     """Show quiz details with the given id"""
-    quiz_data = QuizData.query.get_or_404(id)
+    quiz_data = QuizData.query.get_or_404(quiz_id)
+    video_images = []
+    video_ids = []
+    video_images_ids = []
+    print('*******************************************∂')
+    print("Type: ", type(quiz_data.suggested_videos))
+    suggested_videos = quiz_data.suggested_videos.replace('{', "")
+    suggested_videos = suggested_videos.replace('}', "")
+    print('*******************************************∂')
+    print(suggested_videos.split(','))
+    split_video_data = suggested_videos.split(',')
+    for item in split_video_data:
+        if 'https' in item:
+            video_images.append(item)
+        else:
+            video_ids.append(item)
+
+    video_images_ids.append((video_images[0], video_ids[0]))
+    video_images_ids.append((video_images[1], video_ids[1]))
+    video_images_ids.append((video_images[2], video_ids[2]))
+    print('*******************************************∂')
+    print(video_images_ids)
+    print('*******************************************∂')
+
+    return render_template('quiz_detail_page.html', quiz_data=quiz_data, video_images_ids=video_images_ids)
+
+
 def form_error(form):
     db.session.rollback()
     if User.query.filter(User.email == form.email.data).first():
