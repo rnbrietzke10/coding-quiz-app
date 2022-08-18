@@ -116,9 +116,11 @@ def user_dashboard(user_id):
     If the user is not logged or trying to get to another user's dashboard redirect them to the home page
     """
     user = g.user
+
+    user_quiz_data = user.quizzes_data
     if user:
         print("Image url: ", user.image_url)
-        return render_template("user_homepage.html", user=user)
+        return render_template("user_homepage.html", user=user, user_quiz_data=user_quiz_data )
 
     return redirect("/")
 
@@ -263,7 +265,10 @@ def quiz_results_page(user_id):
     if user.id == g.user.id:
         return render_template('edit_user_info.html', form=form)
 
-
+@app.route('/quiz-data/<int:id>')
+def quiz_detail_page(id):
+    """Show quiz details with the given id"""
+    quiz_data = QuizData.query.get_or_404(id)
 def form_error(form):
     db.session.rollback()
     if User.query.filter(User.email == form.email.data).first():
@@ -275,7 +280,7 @@ def form_error(form):
 def store_quiz_data(obj):
     """Store quiz data in quizzes_data table"""
     try:
-        data = QuizData(quiz_category=session["category"], score=obj["score"],
+        data = QuizData(quiz_category=session["category"].title(), score=obj["score"],
                         correct_questions=obj['correct_questions'],
                         missed_questions=obj['missed_questions'], unanswered_questions=obj['did_not_answer'],
                         suggested_videos=obj['suggested_videos'], user_id=g.user.id)

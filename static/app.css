@@ -38,24 +38,29 @@
 
 .nav-links-container {
     display: flex;
+    height: 100%;
     min-width: 30%;
     align-items: center;
+    justify-content: center;
 }
 
 .nav-links {
+    display: flex;
+    align-items: center;
     text-decoration: none;
     color: aliceblue;
-    margin-right: 40px;
+    height: 100%;
     padding: 10px 20px;
-    border-radius: 10px;
-    transition: 0.5s;
+    transition: 1s;
+    font-weight: bold;
+
 
 }
 
 .nav-links:hover {
     background-color: aliceblue;
     color: steelblue;
-    transition: 0.5s;
+    transition: 1s;
     text-decoration: none;
 
 
@@ -113,12 +118,12 @@ form {
 /******************* User profile styling *******************/
 .user-profile-heading {
     margin-top: 20px;
+    margin-right: 60px;
+    width: 100%;
     padding: 10px;
-    width: 80%;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    height: 200px;
 
 
 }
@@ -135,6 +140,34 @@ form {
     width: 100px;
 }
 
+.take-quiz-form {
+    width: 150px;
+}
+
+.quizzes-data-container {
+    width: 80%;
+    margin: 20px;
+    display: flex;
+}
+
+.quiz-data-container {
+    width: 200px;
+    height: 200px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: aliceblue;
+    padding: 25px;
+}
+
+.quiz-details-form {
+    width: 100%;
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+}
 
 /* Quiz Page */
 
@@ -199,7 +232,7 @@ form {
 .correct {
     background-color: #028A0F;
     border: 1px solid darkgreen;
-     color: #fff;
+    color: #fff;
 }
 
 .wrong {
@@ -216,10 +249,10 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-     margin-top: 15px;
+    margin-top: 15px;
 }
 
-.suggested-videos{
+.suggested-videos {
     display: flex;
     width: 100%;
     justify-content: space-evenly;

@@ -5,11 +5,22 @@ content %}
 
         <img src="{{ user.image_url }}" alt="{{ user.first_name }}'s profile picture"
              class="user-profile-image circular-profile-image">
-
+        <form action="/quiz" class="take-quiz-form">
+            <button class="btn btn-outline-primary" id="take-quiz" type="submit">Take Quiz!</button>
+        </form>
     </div>
-
-    <form action="/quiz">
-        <button class="btn btn-outline-primary" id="take-quiz" type="submit">Take Quiz!</button>
-    </form>
+    {% if user_quiz_data %}
+        <div class="quizzes-data-container">
+            {% for quiz in user_quiz_data %}
+                <div id="quiz-{{ quiz.id }}" class="card quiz-data-container">
+                    <h3>{{ quiz.quiz_category }}</h3>
+                    <p>Score: {{ quiz.score }}</p>
+                    <form action="/quiz-data/{{ quiz.id }}" class="quiz-details-form">
+                        <button type="submit" class="btn btn-primary">Quiz Details</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
 {% endblock %}
