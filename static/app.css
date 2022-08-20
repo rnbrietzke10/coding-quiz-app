@@ -20,57 +20,10 @@
 }
 
 /******************* Nav bar styling *******************/
-.outer-nav-container {
-    display: flex;
-    justify-content: space-between;
-    background-color: steelblue;
-    align-items: center;
-    height: 75px;
+.no-text-wrap {
+    white-space: nowrap;
 }
 
-.nav-heading-container {
-    margin-left: 20px;
-}
-
-.nav-heading-container h2 {
-    color: aliceblue;
-}
-
-.nav-links-container {
-    display: flex;
-    height: 100%;
-    min-width: 30%;
-    align-items: center;
-    justify-content: center;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: aliceblue;
-    height: 100%;
-    padding: 10px 20px;
-    transition: 1s;
-    font-weight: bold;
-
-
-}
-
-.nav-links:hover {
-    background-color: aliceblue;
-    color: steelblue;
-    transition: 1s;
-    text-decoration: none;
-
-
-}
-
-
-#nav-profile-image {
-    height: 50px;
-    width: 50px;
-}
 
 /******************* Home Page Styling *******************/
 .home-content-container {
@@ -113,13 +66,21 @@ form {
 
 .btn {
     margin-top: 10px;
+
+}
+
+#submit-quiz-btn {
+    margin-bottom: 50px;
 }
 
 /******************* User profile styling *******************/
-.user-profile-heading {
-    margin-top: 20px;
-    margin-right: 60px;
+#user-dashboard {
+    display: flex;
     width: 100%;
+}
+
+.user-profile-heading {
+    margin: 30px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -144,10 +105,16 @@ form {
     width: 150px;
 }
 
+#user-quiz-results-container {
+    margin: 35px 25px 25px;
+    text-align: center;
+}
+
 .quizzes-data-container {
-    width: 80%;
     margin: 20px;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .quiz-data-container {
@@ -160,6 +127,11 @@ form {
     align-items: center;
     background-color: aliceblue;
     padding: 25px;
+    margin-bottom: 15px;
+}
+
+.quiz-category-heading {
+    margin-top: 15px;
 }
 
 .quiz-details-form {
@@ -175,8 +147,6 @@ form {
     width: 80%;
     display: flex;
     flex-direction: column;
-    /*align-items: center;*/
-
 }
 
 .qa-container {
@@ -248,7 +218,6 @@ form {
 .suggested-videos-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
     margin-top: 15px;
 }
 
@@ -257,4 +226,64 @@ form {
     width: 100%;
     justify-content: space-evenly;
     margin-top: 15px;
+    flex-wrap: wrap;
 }
+
+.video {
+    margin-bottom: 10px;
+}
+
+.video-img {
+    width: 200px;
+}
+.video-title {
+    text-align: center;
+    margin-top: 10px;
+    width: 200px;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .nav-heading-container h2 {
+        font-size: 1rem;
+    }
+
+    .nav-links-container {
+        min-width: 20%;
+    }
+
+    .nav-links {
+        font-size: 1rem;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    #user-dashboard {
+        justify-content: center;
+    }
+
+    .question-text {
+        font-size: 1rem;
+    }
+
+    .answer-choice-container {
+
+        grid-template-columns: 1fr;
+    }
+
+
+}
+
+@media only screen and (max-width: 768px) {
+    #user-dashboard {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    #user-quiz-results-container {
+        max-width: 500px;
+    }
+}
+

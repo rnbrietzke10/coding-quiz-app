@@ -12,7 +12,7 @@ content %}
             </div>
         </div>
         <div class="questions-container">
-            <div class="results-container" id="questions-wrong"><h3>Wrong Answers</h3>
+            <div class="results-container" id="questions-wrong"><h3>Incorrect Answers</h3>
                 {% for question in quiz_data.missed_questions %}
                     <div class="answer wrong">{{ question }}</div>
                 {% endfor %}
@@ -21,9 +21,13 @@ content %}
         <div class="suggested-videos-container"><h3>Suggested Videos</h3>
             <div class="suggested-videos">
                 {% for video in video_images_ids %}
-                    <div class="video"><a href="https://www.youtube.com/watch?v={{ video[1] }}"
-                                          target="_blank"><img src="{{ video[0] }}"
-                                                               alt="Suggested video"/></a></div>`
+                    <div class="video">
+
+                        <a href="https://www.youtube.com/watch?v={{ video[1] }}"
+                           target="_blank"><img src="{{ video[0] }}" class="video-img"
+                                                alt="Suggested video"/></a>
+                        <p class="video-title">{{ video[2] }}</p>
+                    </div>
                 {% endfor %}
             </div>
         </div>

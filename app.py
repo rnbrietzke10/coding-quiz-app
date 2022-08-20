@@ -54,7 +54,7 @@ def logout_user():
 
 @app.route('/')
 def home_page():
-    return render_template('home_page.html')
+    return redirect('/signup')
 
 
 """************************* User signup, login, logout Routes  *************************"""
@@ -79,7 +79,7 @@ def signup_route():
             form_error(form)
             return render_template('signup_page.html', form=form)
         login_user(user)
-        return redirect('/')
+        return redirect(f"/users/dashboard/{user.id}")
     else:
         return render_template('signup_page.html', form=form)
 
@@ -116,13 +116,12 @@ def user_dashboard(user_id):
     If the user is not logged or trying to get to another user's dashboard redirect them to the home page
     """
     user = g.user
-
-    user_quiz_data = user.quizzes_data
-    if user:
-        print("Image url: ", user.image_url)
+    if user.id == user_id:
+        user_quiz_data = user.quizzes_data
         return render_template("user_homepage.html", user=user, user_quiz_data=user_quiz_data)
-
-    return redirect("/")
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/signup")
 
 
 @app.route('/quiz', methods=["GET", "POST"])
@@ -180,20 +179,96 @@ def quiz_results():
 
 def request_youtube_api(query):
     res = requests.get(
-        f"https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q={query}&key={YOUTUBE_API_KEY}")
+        f'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q={session["category"]}%20{query}&key={YOUTUBE_API_KEY}')
 
     res_json = res.content
     data = json.loads(res_json)
     youtube_data = []
-
+    print(data)
     for video in data['items']:
-        youtube_data.append([video['snippet']['thumbnails']['default']['url'], video['id']['videoId']])
+        youtube_data.append(
+            [video['snippet']['thumbnails']['default']['url'], video['id']['videoId'], video['snippet']['title']])
 
     session['youtube_data'] = youtube_data
+    print('****************************************')
+    print(youtube_data)
+    print('****************************************')
     return youtube_data
 
 
+@app.route('/users/dashboard/<int:user_id>/edit', methods=["GET", "POST"])
+def edit_user_profile(user_id):
+    """
+    Edit user information
+    """
+    user = User.query.filter_by(id=user_id).first()
+    print(user)
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect('/signup')
+    form = UpdateProfileForm(obj=user)
+    if form.validate_on_submit():
+        try:
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.email = form.email.data
+            user.username = form.username.data
+            user.image_url = form.image_url.data
+            db.session.commit()
+        except IntegrityError:
+            form_error(form)
+            return render_template('edit_user_info.html', form=form)
+
+        return redirect('/')
+    if user.id == g.user.id:
+        return render_template('edit_user_info.html', form=form)
+
+
+@app.route('/quiz-data/<int:quiz_id>')
+def quiz_detail_page(quiz_id):
+    """Show quiz details with the given id"""
+    quiz_data = QuizData.query.get_or_404(quiz_id)
+    video_images = []
+    video_ids = []
+    video_images_ids = []
+    video_titles = []
+
+    suggested_videos = quiz_data.suggested_videos.replace('{', "")
+    suggested_videos = suggested_videos.replace('}', "")
+
+    split_video_data = suggested_videos.split(',')
+    # print('******************************************')
+    # print("split_video_data", split_video_data)
+    # print('******************************************')
+    for item in split_video_data:
+        if 'https' in item:
+            video_images.append(item)
+        elif " " in item:
+            first_filter = item.replace("'", "")
+            second_filter = first_filter.replace('"', '')
+            video_titles.append(second_filter)
+        else:
+            video_ids.append(item)
+    # print('******************************************')
+    # print("images", video_images)
+    # print('******************************************')
+    print('******************************************')
+    # print("ids", video_ids)
+    print('video_titles: ', video_titles)
+    print('******************************************')
+
+    video_images_ids.append((video_images[0], video_ids[0], video_titles[0]))
+    video_images_ids.append((video_images[1], video_ids[1], video_titles[1]))
+    video_images_ids.append((video_images[2], video_ids[2], video_titles[2]))
+
+    return render_template('quiz_detail_page.html', quiz_data=quiz_data, video_images_ids=video_images_ids)
+
+
 def check_answers(results):
+    """
+    Check which answers are correct and incorrect
+    Store data in object and then store data in database
+    """
     question_data = session['data']
 
     checked_answers = {
@@ -204,11 +279,6 @@ def check_answers(results):
         'did_not_answer': [],
         'suggested_videos': []
     }
-    """
-    video data for styling
-    'suggested_videos': [['https://i.ytimg.com/vi/HCQxjQoeWpg/default.jpg', 'HCQxjQoeWpg'], ['https://i.ytimg.com/vi/dxHTkqSpz-w/default.jpg', 'dxHTkqSpz-w'], ['https://i.ytimg.com/vi/ozS7R0vfsEM/default.jpg', 'ozS7R0vfsEM']]}
-
-    """
 
     for question in question_data:
         user_answer = results['answers'].get(str(question['id']))
@@ -242,57 +312,10 @@ def check_answers(results):
     return checked_answers
 
 
-@app.route('/users/dashboard/<int:user_id>/edit', methods=["GET", "POST"])
-def quiz_results_page(user_id):
-    user = User.query.filter_by(id=user_id).first()
-    print(user)
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect('/signup')
-    form = UpdateProfileForm(obj=user)
-    if form.validate_on_submit():
-        try:
-            user.first_name = form.first_name.data
-            user.last_name = form.last_name.data
-            user.email = form.email.data
-            user.username = form.username.data
-            user.image_url = form.image_url.data
-            db.session.commit()
-        except IntegrityError:
-            form_error(form)
-            return render_template('edit_user_info.html', form=form)
-
-        return redirect('/')
-    if user.id == g.user.id:
-        return render_template('edit_user_info.html', form=form)
-
-
-@app.route('/quiz-data/<int:quiz_id>')
-def quiz_detail_page(quiz_id):
-    """Show quiz details with the given id"""
-    quiz_data = QuizData.query.get_or_404(quiz_id)
-    video_images = []
-    video_ids = []
-    video_images_ids = []
-
-    suggested_videos = quiz_data.suggested_videos.replace('{', "")
-    suggested_videos = suggested_videos.replace('}', "")
-
-    split_video_data = suggested_videos.split(',')
-    for item in split_video_data:
-        if 'https' in item:
-            video_images.append(item)
-        else:
-            video_ids.append(item)
-
-    video_images_ids.append((video_images[0], video_ids[0]))
-    video_images_ids.append((video_images[1], video_ids[1]))
-    video_images_ids.append((video_images[2], video_ids[2]))
-
-    return render_template('quiz_detail_page.html', quiz_data=quiz_data, video_images_ids=video_images_ids)
-
-
 def form_error(form):
+    """
+    Check if email or username is already used and display appropriate message
+    """
     db.session.rollback()
     if User.query.filter(User.email == form.email.data).first():
         flash("Email is already taken", "danger")

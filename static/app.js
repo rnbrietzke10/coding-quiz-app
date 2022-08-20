@@ -48,7 +48,7 @@ function createResultElements(data) {
     }
 
     if (data['missed_questions'].length !== 0) {
-        $('.quiz-container').append('<div class="results-container" id="questions-wrong" ><h3>Wrong Answers</h3></div>')
+        $('.quiz-container').append('<div class="results-container" id="questions-wrong" ><h3>Incorrect Answers</h3></div>')
         for (let i = 0; i < data['missed_questions'].length; i++) {
             $('#questions-wrong').append(`<div class="answer wrong">${data['missed_questions'][i]}</div>`)
         }
@@ -63,7 +63,7 @@ function createResultElements(data) {
     if (data['suggested_videos']) {
         $('#questions-wrong').append(`<div class="suggested-videos-container"><h3>Suggested Videos</h3><div class="suggested-videos"></div></div>`)
         for (let i = 0; i < data['suggested_videos'].length; i++) {
-            $('.suggested-videos').append(`<div class="video"><a href="https://www.youtube.com/watch?v=${data['suggested_videos'][i][1]}" target="_blank" ><img src="${data['suggested_videos'][i][0]}" alt="Suggested Video ${i + 1}"></a></div>`)
+            $('.suggested-videos').append(`<div class="video"><a href="https://www.youtube.com/watch?v=${data['suggested_videos'][i][1]}" target="_blank" ><img src="${data['suggested_videos'][i][0]}"  class="video-img" alt="Suggested Video ${i + 1}"></a> <p class="video-title">${data['suggested_videos'][i][2]}</p></div>`)
         }
     }
 }
