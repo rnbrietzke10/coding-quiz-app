@@ -274,12 +274,10 @@ def quiz_detail_page(quiz_id):
     video_images = []
     video_ids = []
     video_images_ids = []
-    print('*******************************************∂')
-    print("Type: ", type(quiz_data.suggested_videos))
+
     suggested_videos = quiz_data.suggested_videos.replace('{', "")
     suggested_videos = suggested_videos.replace('}', "")
-    print('*******************************************∂')
-    print(suggested_videos.split(','))
+
     split_video_data = suggested_videos.split(',')
     for item in split_video_data:
         if 'https' in item:
@@ -290,9 +288,6 @@ def quiz_detail_page(quiz_id):
     video_images_ids.append((video_images[0], video_ids[0]))
     video_images_ids.append((video_images[1], video_ids[1]))
     video_images_ids.append((video_images[2], video_ids[2]))
-    print('*******************************************∂')
-    print(video_images_ids)
-    print('*******************************************∂')
 
     return render_template('quiz_detail_page.html', quiz_data=quiz_data, video_images_ids=video_images_ids)
 
