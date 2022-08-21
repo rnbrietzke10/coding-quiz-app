@@ -17,7 +17,7 @@ db.create_all()
 u1 = User.sign_up(
     first_name="Sharon",
     last_name="Smith",
-    email="sharon@gmail.com",
+    email="sharon123@gmail.com",
     username="sharon123",
     password="apples",
 )
