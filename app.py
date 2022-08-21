@@ -11,17 +11,17 @@ from forms import SignUpForm, LoginForm, UpdateProfileForm, CreateQuizForm
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///quiz_app_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24))
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
 
-API_KEY = environ.get('API_KEY')
-YOUTUBE_API_KEY = environ.get('YOUTUBE_API_KEY')
+API_KEY = os.environ.get('API_KEY')
+YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY')
 BASE_URL = 'https://quizapi.io/api/v1/questions'
 
 
