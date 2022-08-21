@@ -1,8 +1,9 @@
 {% extends 'base.html' %} {% block title %}Signup{% endblock %} {% block content %}
-    <h1>Sign up for the Coding Quiz App!</h1>
+    <h1>Edit your Information</h1>
 
     <form method="post">
         {% include "_form.html" %}
-        <button class="btn btn-danger" type="submit">Submit Changes</button>
+        <button class="btn btn-primary" type="submit">Submit Changes</button>
+        <a href="/users/dashboard/{{ user.id }}/delete" class="btn btn-danger" >Delete User</a>
     </form>
 {% endblock %}

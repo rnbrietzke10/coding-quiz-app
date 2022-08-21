@@ -23,16 +23,21 @@ class UpdateProfileForm(FlaskForm):
     first_name = StringField("First Name", [validators.DataRequired()])
     last_name = StringField("Last Name", [validators.DataRequired()])
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
-    # password = PasswordField("Password", [validators.DataRequired(validators.Length(min=8))])
     image_url = StringField('(Optional) Image URL')
 
 
 class CreateQuizForm(FlaskForm):
     """Form to select quiz topic, number of questions and difficulty"""
     tags = SelectField('Quiz Topics', choices=[('docker', 'Docker'), ('devops', 'DevOps'), ('laravel', 'Laravel'),
-                                                ('html', 'HTML'), ('php', 'PHP'), ('javascript', 'JavaScript'),
-                                                ('wordpress', 'WordPress'), ('bash', 'Bash'),
-                                                (None, 'Random Questions')])
+                                               ('html', 'HTML'), ('php', 'PHP'), ('javascript', 'JavaScript'),
+                                               ('wordpress', 'WordPress'), ('bash', 'Bash'),
+                                               (None, 'Random Questions')])
     limit = SelectField('Number of Questions', choices=[(5, 5), (10, 10), (15, 15), (20, 20)])
     difficulty = SelectField('Question Difficulty', choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard'),
                                                              (None, 'Random')])
+
+
+class DeleteUser(FlaskForm):
+    """Delete User Form used to authenticate user before deleting account"""
+    username = StringField("Username", [validators.DataRequired()])
+    password = PasswordField("Password", [validators.DataRequired(validators.Length(min=8))])

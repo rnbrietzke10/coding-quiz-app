@@ -46,7 +46,6 @@ Use YouTube API to suggest videos on topics where questions were missed.
 
 ### User Flow
 
-(Initial - will add more detail)
 
 Users who are not logged in will see a list of topics for questions, and list of features of the application.
 

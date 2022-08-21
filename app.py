@@ -7,7 +7,7 @@ from flask import Flask, render_template, redirect, session, flash, g, jsonify, 
 from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User, QuizData
-from forms import SignUpForm, LoginForm, UpdateProfileForm, CreateQuizForm
+from forms import SignUpForm, LoginForm, UpdateProfileForm, CreateQuizForm, DeleteUser
 
 app = Flask(__name__)
 
@@ -114,6 +114,59 @@ def logout_route():
     return redirect('/')
 
 
+@app.route('/users/dashboard/<int:user_id>/edit', methods=["GET", "POST"])
+def edit_user_profile(user_id):
+    """
+    Edit user information
+    """
+    user = User.query.filter_by(id=user_id).first()
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect('/signup')
+    form = UpdateProfileForm(obj=user)
+    if form.validate_on_submit():
+        try:
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.email = form.email.data
+            user.username = form.username.data
+            user.image_url = form.image_url.data
+            db.session.commit()
+        except IntegrityError:
+            form_error(form)
+            return render_template('edit_user_info.html', form=form, user=user)
+
+        return redirect('/')
+    if user.id == g.user.id:
+        return render_template('edit_user_info.html', form=form, user=user)
+
+
+@app.route('/users/dashboard/<int:user_id>/delete', methods=["GET", "POST"])
+def delete_user(user_id):
+    """Show delete user form and delete user if authenticated"""
+    form = DeleteUser()
+    user = User.query.filter_by(id=user_id).first()
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect('/signup')
+    if form.validate_on_submit():
+        try:
+            authenticated = User.authenticate(form.username.data, form.password.data)
+            if authenticated:
+                logout_user()
+                db.session.delete(g.user)
+                db.session.commit()
+                return redirect('/signup')
+            else:
+                flash("Error: User was unable to deleted.", "danger")
+                return redirect('/login')
+        except IntegrityError:
+            flash("Something went wrong with deleting the user. Please login and try again", "danger")
+            return redirect('/login')
+    if user.id == g.user.id:
+        return render_template('delete_user.html', form=form)
+
+
 @app.route('/users/dashboard/<int:user_id>')
 def user_dashboard(user_id):
     """Route user to dashboard if logged-in user is authenticated.
@@ -195,33 +248,6 @@ def request_youtube_api(query):
     session['youtube_data'] = youtube_data
 
     return youtube_data
-
-
-@app.route('/users/dashboard/<int:user_id>/edit', methods=["GET", "POST"])
-def edit_user_profile(user_id):
-    """
-    Edit user information
-    """
-    user = User.query.filter_by(id=user_id).first()
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect('/signup')
-    form = UpdateProfileForm(obj=user)
-    if form.validate_on_submit():
-        try:
-            user.first_name = form.first_name.data
-            user.last_name = form.last_name.data
-            user.email = form.email.data
-            user.username = form.username.data
-            user.image_url = form.image_url.data
-            db.session.commit()
-        except IntegrityError:
-            form_error(form)
-            return render_template('edit_user_info.html', form=form)
-
-        return redirect('/')
-    if user.id == g.user.id:
-        return render_template('edit_user_info.html', form=form)
 
 
 @app.route('/quiz-data/<int:quiz_id>')
