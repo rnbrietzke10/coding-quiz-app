@@ -184,15 +184,12 @@ def request_youtube_api(query):
     res_json = res.content
     data = json.loads(res_json)
     youtube_data = []
-    print(data)
     for video in data['items']:
         youtube_data.append(
             [video['snippet']['thumbnails']['default']['url'], video['id']['videoId'], video['snippet']['title']])
 
     session['youtube_data'] = youtube_data
-    print('****************************************')
-    print(youtube_data)
-    print('****************************************')
+
     return youtube_data
 
 
@@ -202,7 +199,6 @@ def edit_user_profile(user_id):
     Edit user information
     """
     user = User.query.filter_by(id=user_id).first()
-    print(user)
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect('/signup')
@@ -237,9 +233,7 @@ def quiz_detail_page(quiz_id):
     suggested_videos = suggested_videos.replace('}', "")
 
     split_video_data = suggested_videos.split(',')
-    # print('******************************************')
-    # print("split_video_data", split_video_data)
-    # print('******************************************')
+
     for item in split_video_data:
         if 'https' in item:
             video_images.append(item)
@@ -249,13 +243,6 @@ def quiz_detail_page(quiz_id):
             video_titles.append(second_filter)
         else:
             video_ids.append(item)
-    # print('******************************************')
-    # print("images", video_images)
-    # print('******************************************')
-    print('******************************************')
-    # print("ids", video_ids)
-    print('video_titles: ', video_titles)
-    print('******************************************')
 
     video_images_ids.append((video_images[0], video_ids[0], video_titles[0]))
     video_images_ids.append((video_images[1], video_ids[1], video_titles[1]))
@@ -279,6 +266,7 @@ def check_answers(results):
         'did_not_answer': [],
         'suggested_videos': []
     }
+    youtube_suggestions = None
 
     for question in question_data:
         user_answer = results['answers'].get(str(question['id']))
@@ -300,7 +288,7 @@ def check_answers(results):
         idx = random.randint(0, len(checked_answers['missed_questions']) - 1)
         youtube_suggestions = request_youtube_api(checked_answers['missed_questions'][idx])
         checked_answers['suggested_videos'] = youtube_suggestions
-        print(checked_answers)
+
     else:
         idx = random.randint(0, len(session['data']) - 1)
         if session['data'][idx]['tags']['name']:

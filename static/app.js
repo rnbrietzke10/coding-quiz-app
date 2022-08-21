@@ -3,7 +3,6 @@ const $choice = $('.choice-container')
 const answeredQuestions = {}
 $choice.on("click",
     function (evt) {
-        console.log(evt)
         let choiceIdArray = evt.target.id.split('-')
         let id = choiceIdArray[0]
         let choice = choiceIdArray[1]
@@ -29,7 +28,7 @@ $('#submit-quiz-btn').on('click', async function () {
         createResultElements(response.data)
     })
         .catch(function (error) {
-            console.log(error);
+            console.log("Something went wrong");
         });
 })
 
@@ -39,7 +38,6 @@ function createResultElements(data) {
     $('.quiz-btn-container').remove()
 
 
-    console.log(data)
     if (data['correct_questions'].length !== 0) {
         $('.quiz-container').append('<div class="results-container" id="questions-correct" ><h3>Correct Answers</h3></div>')
         for (let i = 0; i < data['correct_questions'].length; i++) {
