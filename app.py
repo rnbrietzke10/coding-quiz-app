@@ -1,7 +1,6 @@
 import os
 import json
 import random
-import re
 import requests
 from flask import Flask, render_template, redirect, session, flash, g, jsonify, request
 from sqlalchemy.exc import IntegrityError
@@ -136,7 +135,7 @@ def edit_user_profile(user_id):
             form_error(form)
             return render_template('edit_user_info.html', form=form, user=user)
 
-        return redirect('/')
+        return redirect(f'/users/dashboard/{user_id}')
     if user.id == g.user.id:
         return render_template('edit_user_info.html', form=form, user=user)
 
