@@ -11,10 +11,11 @@ from forms import SignUpForm, LoginForm, UpdateProfileForm, CreateQuizForm, Dele
 app = Flask(__name__)
 
 uri = os.environ.get('DATABASE_URL')
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
+# if uri.startswith("postgres://"):
+#     uri = uri.replace("postgres://", "postgresql://", 1)
+# os.environ.get('postgresql:///quiz_app_db')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///quiz_app_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24))
@@ -57,7 +58,10 @@ def logout_user():
 
 @app.route('/')
 def home_page():
-    return redirect('/signup')
+    if g.user:
+        return redirect(f'/users/dashboard/{g.user.id}')
+    else:
+        return redirect('/signup')
 
 
 """************************* User signup, login, logout Routes  *************************"""
